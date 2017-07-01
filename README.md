@@ -1,0 +1,23 @@
+# HungerShack
+
+
+Set up virtual enviornment by the command, 
+`virtualenv env`
+
+
+after getting into the virtual enviornment install the following.
+
+
+Install the following dependencies, 
+
+
+* `django`
+* `djangorestframework`
+* `psycogp2`
+using pip.
+
+
+Javascript and angular dependencies can be found on [here](http://engineroom.trackmaven.com/blog/getting-started-drf-angularjs-part-1/)
+
+
+Backend runs on postgresql, instructions to run postgresql on local system can be found at [here](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04). Set the credentials accordingly and change it at the settings.py.
