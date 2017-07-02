@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'user',
+    'customer',
     'sms',
     'chain',
     'coupon',
@@ -70,7 +70,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hungershack',
+        'NAME': 'ann',
         'USER': 'apiadmin',
         'PASSWORD': 'password',
         'HOST': 'localhost',
