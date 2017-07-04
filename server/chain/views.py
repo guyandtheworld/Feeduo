@@ -1,16 +1,22 @@
 from django.http import Http404
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from chain.models import Chain
+from chain.permissions import IsPostOrIsAuthenticated
 from chain.serializers import ChainSerializer
+
+
 
 class ChainList(APIView):
     """
     Create Chain or view all Chains
     """
+
+    permission_classes = (IsPostOrIsAuthenticated,)
 
     def get(self, request, format=None):
         Chains = Chain.objects.all()
@@ -30,6 +36,8 @@ class ChainDetail(APIView):
     """
     Retrieve, update, delete a Chain
     """
+
+    permission_classes = (IsAuthenticated, )
 
     def get_object(self, pk):
         try:

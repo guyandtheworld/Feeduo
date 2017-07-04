@@ -2,19 +2,43 @@ import json
 
 from django.http import Http404
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from chain.models import Chain
 from customer.models import Customer
+from customer.permissions import IsPostOrIsAuthenticated
 from customer.serializers import CustomerSerializer, CustomerChainSerializer, ChainCustomerSerializer
+
+
+"""
+Security Issue
+
+The security problem faced now is, suppose a person registers his details name,
+email, number on the site which uses no password, a time limit 
+is to be set for selecting the chain after the initial log in details.
+For adding more chains or changing email or number, one has to got to our site,
+get a comfirmation email to their own email and a time limit will be provided for
+selecting the chains or to change the number. To change email, one will receive a 
+message on their registered number and can use the token or link to change the 
+
+Throttling Issue
+
+Since the API can be very prone to DDoS attacks, we're keeping the throttling value
+to the bare minimum. The GET request for Customer and Chain will be accessible to 
+only the authorized user and the POST request will be limited to 3 per minute and 10
+per day.
+"""
 
 
 class CustomerList(APIView):
     """
     Create Customer or view all Customers
     """
+
+    permission_classes = (IsPostOrIsAuthenticated,)
 
     def get(self, request, format=None):
         customers = Customer.objects.all()
@@ -34,6 +58,8 @@ class CustomerDetail(APIView):
     """
     Retrieve, update, delete a Customer
     """
+
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -65,6 +91,7 @@ class CustomerChainView(APIView):
     """
     Link chains with customer
     """
+
     def get_customer_object(self, pk):
         try:
             return Customer.objects.get(pk=pk)
