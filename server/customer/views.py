@@ -1,9 +1,12 @@
+import json
+
 from django.http import Http404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from chain.models import Chain
 from customer.models import Customer
 from customer.serializers import CustomerSerializer, CustomerChainSerializer, ChainCustomerSerializer
 
@@ -62,7 +65,6 @@ class CustomerChainView(APIView):
     """
     Link chains with customer
     """
-    # Chain names are supposed to be unique
     def get_customer_object(self, pk):
         try:
             return Customer.objects.get(pk=pk)
@@ -76,12 +78,17 @@ class CustomerChainView(APIView):
 
     def post(self, request, pk, format=None):
         customer = self.get_customer_object(pk)
-        # A way to get chain models from the user using api and linking with Customer
-        print(request.data)
-        serializer = ChainCustomerSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        chains = request.GET.get('chains')
+        chains = chains.split(',')
+        success = []
+        for chain_name in chains:
+            try:
+                chain = Chain.objects.get(name=chain_name)
+            except Chain.DoesNotExist:
+                chain = None
+            if chain is not None and chain not in customer.chains.all() :
+                customer.chains.add(chain)
+                success.append(chain_name)
+        success_json = {}
+        success_json["added"] = success
+        return Response(success_json, status=status.HTTP_201_CREATED)

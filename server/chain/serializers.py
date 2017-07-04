@@ -6,4 +6,4 @@ from models import Chain
 class ChainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chain
-        fields = ('name', 'email', 'address', 'contact_number', 'number_of_stores')
+        fields = ('name', 'email', 'contact_number')
