@@ -5,10 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from chain.models import Chain
-from chain.permissions import IsPostOrIsAuthenticated
-from chain.serializers import ChainSerializer
+from models import Chain
+from serializers import ChainSerializer
 
+from permissions import IsPostOrIsAuthenticated
 
 
 class ChainList(APIView):

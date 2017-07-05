@@ -8,9 +8,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from chain.models import Chain
-from customer.models import Customer
-from customer.permissions import IsPostOrIsAuthenticated
-from customer.serializers import CustomerSerializer, CustomerChainSerializer, ChainCustomerSerializer
+
+from models import Customer
+from permissions import IsPostOrIsAuthenticated
+from serializers import CustomerSerializer, CustomerChainSerializer, ChainCustomerSerializer
+
+from permissions import IsPostOrIsAuthenticated
 
 
 """

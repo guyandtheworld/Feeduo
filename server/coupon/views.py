@@ -9,15 +9,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from chain.models import Chain
-from coupon.models import Coupon
-from coupon.serializers import CouponSerializer
 
+from models import Coupon
+from serializers import CouponSerializer
+from permissions import IsPostOrIsAuthenticated
 
 
 class CouponList(APIView):
     """
     Create Coupon or view all Coupons
     """
+    permission_classes = (IsPostOrIsAuthenticated,)
+
 
     def get(self, request, pk, format=None):
         chain = Chain.objects.get(pk=pk)
@@ -39,6 +42,8 @@ class CouponDetail(APIView):
     """
     Retrieve, update, delete a Coupon
     """
+    
+    permission_classes = (IsAuthenticated,)
 
     def get_chain(self, pk):
         try:
