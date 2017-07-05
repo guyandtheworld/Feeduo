@@ -90,6 +90,7 @@ class CustomerDetail(APIView):
 class CustomerChainView(APIView):
     """
     Link chains with customer
+    Add and view the chains related with Customer
     """
 
     def get_customer_object(self, pk):

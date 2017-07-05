@@ -3,6 +3,7 @@ from rest_framework import serializers
 from models import Customer
 from chain.models import Chain
 
+
 class ChainCustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chain

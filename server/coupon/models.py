@@ -12,7 +12,7 @@ class Coupon(models.Model):
     expiry_date = models.DateField()
 
     def __unicode__(self):
-        return self.coupon_code
+        return self.coupon_name
 
     class Meta:
         ordering = ('expiry_date', )

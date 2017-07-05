@@ -4,6 +4,8 @@ from models import Coupon
 
 
 class CouponSerializer(serializers.ModelSerializer):
+    
+
     class Meta:
         model = Coupon
-        fields = ("coupon_name", "message", "expiry_date")
+        fields = ("chain", "coupon_name", "message", "unique_code", "expiry_date")
