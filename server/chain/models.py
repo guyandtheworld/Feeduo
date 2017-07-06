@@ -8,5 +8,8 @@ class Chain(models.Model):
     contact_number = models.CharField(max_length=10)
     number_of_stores = models.IntegerField(default=1)
 
+    class Meta:
+        ordering = ('name', )
+
     def __unicode__(self):
         return self.name
