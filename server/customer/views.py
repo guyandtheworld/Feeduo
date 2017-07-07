@@ -96,6 +96,12 @@ class CustomerChainView(APIView):
     Add and view the chains related with Customer
     """
 
+    """
+    TODO
+
+    add DELETE UPDATE to CustomerChainView
+    """
+
     def get_customer_object(self, pk):
         try:
             return Customer.objects.get(pk=pk)
@@ -117,9 +123,11 @@ class CustomerChainView(APIView):
                 chain = Chain.objects.get(name=chain_name)
             except Chain.DoesNotExist:
                 chain = None
+            # Inefficient method
             if chain is not None and chain not in customer.chains.all() :
                 customer.chains.add(chain)
                 success.append(chain_name)
+        customer.save()
         success_json = {}
         success_json["added"] = success
         return Response(success_json, status=status.HTTP_201_CREATED)

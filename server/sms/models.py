@@ -9,6 +9,7 @@ class SMS(models.Model):
     def __unicode__(self):
         return "{}".format(self.number)
 
+
 class ChainSwitcher(models.Model):
     customer = models.OneToOneField('customer.Customer', related_name="switcher", on_delete=models.CASCADE)
     switcher = models.PositiveIntegerField(validators=[MaxValueValidator(100)], default=1)
