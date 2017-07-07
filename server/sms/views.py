@@ -14,30 +14,30 @@ class SendSMS(APIView):
 
     permission_classes = (IsAuthenticated,)
 
-    def set_chain(self, switchers, **kwargs):
-        for switch in switchers:
+    def set_chain(self, customers, **kwargs):
+        SMS.objects.all().delete()
+        for customer in customers:
             # customer.chains.all().order_by('names')
-            num = switch.customer.number
-            if num.isdigit() and len(num)==10 and len(switch.customer.chains.all())>0:
-                if len(switch.customer.chains.all())==1:
-                    message_body = random.choice(c.customer.chains.first().coupons.all()).message
+            num = customer.number
+            if num.isdigit() and len(num)==10:
+                if len(customer.chains.all())==1:
+                    chain = customer.chains.first()
                 else:
-                    print(switch.customer.chains.all())
-                    print(switch.switcher)
-                    message_body = switch.customer.chains.all()[switch.switcher]
+                    switch = ChainSwitcher.objects.get(customer=customer)
+                    chain = customer.chains.all()[switch.switcher-1]
                     if switch.switcher == switch.chain_len:
                         switch.switcher = 1
                     else:
                         switch.switcher+=1
                     switch.save()
-                SMS(number=int(num), message_body=message_body).save()
+                coupon = random.choice(chain.coupons.all()).message
+                SMS(number=int(num), message_body=coupon).save()
 
     def process_sms(self, **kwargs):
-        pass
-        """
-            Send trigger to celery to send the sms from the database
-        """
-
+        texts = []
+        for sms in SMS.objects.all():
+            texts.append([sms.number, sms.message_body])
+            
     def get(self, response, format=None):
         return Response({'status': 'Okay, I guess?'}, status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS)
 
@@ -60,5 +60,6 @@ class SendSMS(APIView):
                 chainswitcher.save()
             except ChainSwitcher.DoesNotExist:
                 ChainSwitcher(customer=customer, chain_len=len(customer.chains.all())).save()
-        self.set_chain(ChainSwitcher.objects.all())
-        return Response(serializer.data, status.HTTP_202_ACCEPTED)
+        self.set_chain(customers)
+        self.process_sms()
+        return Response({"STATUS": "OK"}, status.HTTP_202_ACCEPTED)
