@@ -1,18 +1,25 @@
 import random
+import string
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from coupon.models import CouponCode
 from customer.models import Customer
 from sms.models import SMS, ChainSwitcher
-#Temperory
-from customer.serializers import CustomerChainSerializer
+
 
 class SendSMS(APIView):
 
     permission_classes = (IsAuthenticated,)
+
+    def hash_function(self): 
+        code_str = ''.join(random.choice(string.ascii_uppercase) for _ in range(4))
+        code_dig = str(random.randint(10, 99))
+        code = code_str + code_dig
+        return code
 
     def set_chain(self, customers, **kwargs):
         SMS.objects.all().delete()
@@ -30,8 +37,19 @@ class SendSMS(APIView):
                     else:
                         switch.switcher+=1
                     switch.save()
+                code = self.hash_function()
                 coupon = random.choice(chain.coupons.all()).message
-                SMS(number=int(num), message_body=coupon).save()
+                body = "{}- Use {} code to redeem offer.".format(coupon, code)
+                sms = SMS(
+                        number=int(num),
+                        message_body=coupon
+                    )
+                sms.save()
+                CouponCode(
+                        sms=sms,
+                        code=code
+                    ).save()
+        
 
     def process_sms(self, **kwargs):
         texts = []
@@ -62,4 +80,9 @@ class SendSMS(APIView):
                 ChainSwitcher(customer=customer, chain_len=len(customer.chains.all())).save()
         self.set_chain(customers)
         self.process_sms()
-        return Response({"STATUS": "OK"}, status.HTTP_202_ACCEPTED)
+        data = {}
+        msm = SMS.objects.all()
+        for i in msm:
+            data[i.number] = i.message_body
+        # return Response({"STATUS": "OK"}, status.HTTP_202_ACCEPTED)
+        return Response(data, status.HTTP_202_ACCEPTED)
