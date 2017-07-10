@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^chains/(?P<pk>[0-9]+)/$', chain_view.ChainDetail.as_view()),
     url(r'^chains/(?P<pk>[0-9]+)/coupons/$', coupon_view.CouponList.as_view()),
     url(r'^chains/(?P<pk_chain>[0-9]+)/coupons/(?P<pk_coupon>[0-9]+)/$', coupon_view.CouponDetail.as_view()),
-    url(r'^sms/gogogo/$', sms_view.SendSMS.as_view())
+    url(r'^sms/gogogo/$', sms_view.SendSMS.as_view()),
+    url(r'^coupon/verify/$', coupon_view.VerifyCoupon.as_view())
 ]

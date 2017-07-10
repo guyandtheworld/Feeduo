@@ -9,10 +9,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from chain.models import Chain
+from sms.models import SMS
 
-from models import Coupon
-from serializers import CouponSerializer
+from models import Coupon, CouponCode
 from permissions import IsPostOrIsAuthenticated
+from serializers import CouponSerializer, VerifyCouponSerializer
 
 
 class CouponList(APIView):
@@ -84,3 +85,31 @@ class CouponDetail(APIView):
         coupon = self.get_coupon(chain, pk_coupon)
         coupon.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class VerifyCoupon(APIView):
+
+    def get(self, request, format=None, **kwargs):
+        number = request.POST.get('number')
+        print(number)
+        code = request.POST.get('code')
+        sms = get_object_or_404(SMS, number=number)
+        print(code)
+        coupon_code = CouponCode.objects.get(sms=sms).code
+        if coupon_code == code:
+            message = sms.message_body.split('-')[0]
+            data = {}
+            data["message"] = message
+            # Something is really wrong with the serializer
+            return Response(data)
+        else:
+            return Response("{'message': 'wrong code'}")
+
+    def post(self, request, format=None, **kwargs):
+        number = request.POST.get('number')
+        code = request.POST.get('code')
+        sms = get_object_or_404(SMS, number=number)
+        sms.delete()
+        json = {}
+        json["Result"] = "Thanks for coming! Do visit again!"
+        return Response(json)

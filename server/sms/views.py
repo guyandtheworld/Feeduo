@@ -42,7 +42,7 @@ class SendSMS(APIView):
                 body = "{}- Use {} code to redeem offer.".format(coupon, code)
                 sms = SMS(
                         number=int(num),
-                        message_body=coupon
+                        message_body=body
                     )
                 sms.save()
                 CouponCode(
@@ -80,9 +80,4 @@ class SendSMS(APIView):
                 ChainSwitcher(customer=customer, chain_len=len(customer.chains.all())).save()
         self.set_chain(customers)
         self.process_sms()
-        data = {}
-        msm = SMS.objects.all()
-        for i in msm:
-            data[i.number] = i.message_body
-        # return Response({"STATUS": "OK"}, status.HTTP_202_ACCEPTED)
-        return Response(data, status.HTTP_202_ACCEPTED)
+        return Response({"STATUS": "OK"}, status.HTTP_202_ACCEPTED)

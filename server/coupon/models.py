@@ -19,7 +19,7 @@ class Coupon(models.Model):
 
 class CouponCode(models.Model):
     sms = models.OneToOneField(SMS, related_name="code", on_delete=models.CASCADE)
-    code = models.CharField(max_length=7)
+    code = models.CharField(max_length=6)
 
     def __unicode__(self):
         return self.code
