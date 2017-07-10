@@ -1,0 +1,7 @@
+{
+  "name": "HungerShack",
+  "description": "The next big thing",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}

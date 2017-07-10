@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="SampleApplication">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>HungerShack</title>
+
+        <!--  Angular Setup -->
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+        <!-- Application Setup -->
+        <script src="public/appRoutes.js"></script>
+        <script src="public/app.js"></script>
+        <!-- General Setup -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat|Raleway:600" rel="stylesheet">
+        <!--  Controllers -->
+        <script src="public/components/signup/signup.control.js"></script>
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <!-- The dynamic templates will be served within this div -->
+        <ui-view></ui-view>
+    </body>
+</html>
