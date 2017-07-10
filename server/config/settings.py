@@ -26,10 +26,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'customer',
-    'sms',
     'chain',
     'coupon',
+    'customer',
+    'mailer',
+    'sms',
 
 ]
 
@@ -111,6 +112,8 @@ REST_FRAMEWORK = {
         'sustained': '20/day'
     }
 }
+
+EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
