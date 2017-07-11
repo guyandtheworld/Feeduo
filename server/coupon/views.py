@@ -100,10 +100,9 @@ class VerifyCoupon(APIView):
             message = sms.message_body.split('-')[0]
             data = {}
             data["message"] = message
-            # Something is really wrong with the serializer
             return Response(data)
         else:
-            return Response("{'message': 'wrong code'}")
+            return Response("{'message': 'Wrong code'}")
 
     def post(self, request, format=None, **kwargs):
         number = request.POST.get('number')

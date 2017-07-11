@@ -13,7 +13,9 @@ SECRET_KEY = 'g)xal-du=ftd&8fuv%yw8tnq9og7m=2lkllptv2kv4tbl29wi)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.1.66'
+]
 
 
 # Application definition
@@ -108,8 +110,8 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '5/day',
         'user': '100/day',
-        'burst': '5/min',
-        'sustained': '20/day'
+        'burst': '20/min',
+        'sustained': '100/day'
     }
 }
 

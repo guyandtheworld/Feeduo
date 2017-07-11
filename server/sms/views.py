@@ -55,12 +55,13 @@ class SendSMS(APIView):
         texts = []
         for sms in SMS.objects.all():
             texts.append([sms.number, sms.message_body])
-            
+        print(texts)
+
     def get(self, response, format=None):
         return Response({'status': 'Okay, I guess?'}, status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS)
 
     def post(self, response, format=None):
-        customers = Customer.objects.filter(chains__gt=1).distinct()
+        customers = Customer.objects.filter(chains__gt=0).distinct()
         """
         TODO
         load all customer data with more that one chain
