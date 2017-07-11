@@ -20,7 +20,7 @@ class CouponList(APIView):
     """
     Create Coupon or view all Coupons
     """
-    permission_classes = (IsPostOrIsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
 
     def get(self, request, pk, format=None):

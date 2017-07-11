@@ -19,22 +19,6 @@ using pip.
 
 Javascript and angular dependencies can be found on [here](http://engineroom.trackmaven.com/blog/getting-started-drf-angularjs-part-1/)
 
-Setup for angularjs and the client setup
-
-Install right version of node and npm depending on your system
-
-then run following commands in the client folder
-
-npm install
-npm install -g bower   // if not installed
-
-bower install --config.interactive=false --allow-root
-
-node server.js     
-
-
-Now all the requried libs are installed and the server should be running
-
 
 Backend runs on postgresql, instructions to run postgresql on local system can be found at [here](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04). Set the credentials accordingly and change it at the settings.py.
 

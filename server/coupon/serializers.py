@@ -9,7 +9,7 @@ class CouponSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Coupon
-        fields = ("chain", "coupon_name", "message", "unique_code", "expiry_date")
+        fields = ("chain", "coupon_name", "message", "expiry_date")
 
 
 class VerifyCouponSerializer(serializers.ModelSerializer):
