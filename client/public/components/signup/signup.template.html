@@ -1,5 +1,55 @@
-<div ng-controller="SignupController">
-    <div>
-        {{ message }}
-    </div>
+<div class="container">
+<div ng-controller="SignupController" id="formGrp" class="effect1">
+    <form novalidate class="simpleForm" name="frm" class="form-group" autocomplete="off">
+      <fieldset>
+        <legend>Sign Up</legend>        
+          <div class="row"> 
+          <div class="col-lg-6">
+          <input name="name" class="from-control" type="text" ng-model="user.name" placeholder="Name" required> 
+          </div>
+          <div class="col-lg-6">
+        <div class="errorMsg" ng-messages="frm.name.$error" ng-if="frm.name.$dirty" ng-cloak>
+          <div ng-message="required">*Name is required</div>
+          </div>
+          </div>
+        </div>
+            <br>
+          <div class="row"> 
+          <div class="col-lg-6">
+          <input name="num" type="tel" ng-model="user.phoneNum" ng-minlength="10" ng-maxlength="10" placeholder="Mobile Number" required >
+          </div>
+          <div class="col-lg-6">
+        <div class="errorMsg" ng-messages="frm.num.$error" ng-if="frm.num.$dirty" ng-cloak>
+          <div ng-message="required"> *Mobile number is required </div>
+          <div ng-message="minlength" > *Should contain 10 digits </div>
+          <div ng-message="maxlength" > *Should contain 10 digits </div>
+        </div> 
+        </div>
+        </div>
+          <br>
+
+          <div class="row"> 
+          <div class="col-lg-6">
+          <input type="email" class="from-control" name="email" ng-model="user.email" placeholder="Email" required/>
+          </div>
+          <div class="col-lg-6">
+        <div class="errorMsg" lass="errorMsg" ng-messages="frm.email.$error" ng-if="frm.email.$dirty" ng-cloak>
+          <div ng-message="required"> *Email Address is required </div>
+          <div ng-message="email">Enter a valid Email </div>
+        </div>
+        </div>
+        </div>
+            <br>
+          
+        <label>Favourite Chain: </label> 
+          <br>
+        <label ng-repeat="x in chains">
+          <input type="checkbox" class="form-check-label" ng-model="chain" ng-change="add(x)" name="conditions" > {{ x }}
+        </label>
+          <br>
+        <button type="submit" class="btn btn-primary" ng-click="update(user)" ng-disabled="frm.$invalid ">Sign Me Up </button>
+      </fieldset>
+    </form>
 </div>
+</div>
+

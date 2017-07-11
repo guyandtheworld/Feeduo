@@ -1,0 +1,87 @@
+
+/* app css stylesheet */
+
+body{
+  font-family: sans-serif;
+}
+
+html { 
+  background: url(../img/bg.jpg) no-repeat center center fixed !important; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+.navbar {
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
+}
+/* Web Form Styling */
+
+
+legend {
+  text-align: center;
+}
+#formGrp {
+  font-family: "Montserrat", sans-serif;
+  display: block;
+  padding: 30px;
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 100px;
+  background: rgb(109, 165, 255,0.7);
+}
+.effect1
+{
+    position:relative;
+    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+       -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+.effect1:before, .effect1:after
+{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    -webkit-box-shadow:0 0 20px rgba(0,0,0,0.8);
+    -moz-box-shadow:0 0 20px rgba(0,0,0,0.8);
+    box-shadow:0 0 20px rgba(0,0,0,0.8);
+    top:0px;
+    bottom:0px;
+    left:0;
+    right:0;
+    -moz-border-radius:100px / 10px;
+    border-radius:100px / 10px;
+}
+.effect1:after
+{
+    right:10px;
+    left:auto;
+    -webkit-transform:skew(8deg) rotate(3deg);
+       -moz-transform:skew(8deg) rotate(3deg);
+        -ms-transform:skew(8deg) rotate(3deg);
+         -o-transform:skew(8deg) rotate(3deg);
+            transform:skew(8deg) rotate(3deg);
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"]{
+  font-family: "Raleway", sans-serif;
+  border: solid 1px #666;
+  padding: 10px;
+  margin: 5px;
+  width: 100%;
+}
+ .errorMsg{
+  color: #f00;
+  padding-top: 20px;
+  display: inline-block;  
+ }
+
+ #formGrp .btn {
+  margin: 0 auto;
+ }
