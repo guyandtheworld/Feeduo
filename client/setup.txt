@@ -1,0 +1,12 @@
+# SETUP INSTRUCTIONS
+
+run 
+npm install
+npm install -g bower   // if not installed
+
+bower install --config.interactive=false --allow-root
+
+node server.js     
+
+
+Now all the requried libs are installed and the server should be running
