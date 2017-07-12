@@ -11,9 +11,12 @@ after getting into the virtual enviornment install the following.
 Install the following dependencies, 
 
 
-* `django`
-* `djangorestframework`
-* `psycogp2`
+* `Django==1.11.2`
+* `djangorestframework==3.6.3`
+* `psycopg2==2.7.1`
+* `requests==2.18.1`
+
+
 using pip.
 
 
