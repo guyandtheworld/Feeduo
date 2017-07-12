@@ -6,9 +6,8 @@ from sms.models import ChainSwitcher
 
 class Customer(models.Model):
     name = models.CharField(max_length=100)
-    # Set validator to ensure it's a number
     number = models.CharField(max_length=10, unique=True)
-    email = models.EmailField(max_length=70, blank=True, unique=True)
+    email = models.EmailField(max_length=70, unique=True)
     chains = models.ManyToManyField(Chain, blank=True, related_name="users")
 
     def save(self, *args, **kwargs):
