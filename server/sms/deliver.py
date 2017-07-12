@@ -1,18 +1,19 @@
 import random
 import requests
 
+
 class Router(object):
 
     XML_DATA = """<MESSAGE> \
-                    <AUTHKEY>{0}</AUTHKEY> \
-                    <SENDER>{1}</SENDER> \
-                    <ROUTE>{2}</ROUTE> \
-                    <CAMPAIGN>{3}</CAMPAIGN> \
-                    <COUNTRY>{4}</COUNTRY> \
-                    <SMS TEXT="{5}"> \
-                        <ADDRESS TO="{6}"></ADDRESS> \
-                    </SMS> \
-                </MESSAGE>"""\
+                        <AUTHKEY>{0}</AUTHKEY> \
+                        <SENDER>{1}</SENDER> \
+                        <ROUTE>{2}</ROUTE> \
+                        <CAMPAIGN>{3}</CAMPAIGN> \
+                        <COUNTRY>{4}</COUNTRY> \
+                        <SMS TEXT="{5}"> \
+                            <ADDRESS TO="{6}"></ADDRESS> \
+                        </SMS> \
+                  </MESSAGE>"""
 
     CAMPAIGN = "coupons"
 
@@ -27,15 +28,29 @@ class Router(object):
 
     COUNTRY_CODE = 91
 
+    POST_URL = "https://control.msg91.com/api/postsms.php"
+
     def __init__(self, **kwargs):
-        self.number = kwargs.get('number')
-        self.sender_id = kwargs.get('sender_id')
-        self.message = kwargs.get('message')
-        self.route = ROUTE[0] if kwargs.get('route') == 'P' else ROUTE[1]
+        self.xml_data = XML_DATA
         self.auth_key = random.choice(AUTH_KEYS)
+        self.sender_id = kwargs.get('sender_id')
+        if 'route' in kwargs:
+            self.route = ROUTE[0] if kwargs.get('route') == 'P' else ROUTE[1]
+        else:
+            self.route = ROUTE[0]
+        self.message = kwargs.get('message')
+        self.number = kwargs.get('number')
 
     def setUp(self):
-        pass
+        self.xml_data = xml_data.format(
+                self.auth_key,
+                self.sender_id,
+                self.route,
+                CAMPAIGN,
+                COUNTRY_CODE,
+                self.message,
+                self.number,
+            )
 
     def deliver(self):
-        requests.post("https://control.msg91.com/api/postsms.php", data=xml_data)
+        requests.post(POST_URL, data=self.xml_data)
