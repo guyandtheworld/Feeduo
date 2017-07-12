@@ -52,5 +52,5 @@ class Router(object):
                 self.number,
             )
 
-    def deliver(self):
+    def send(self):
         requests.post(POST_URL, data=self.xml_data)
