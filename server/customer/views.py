@@ -52,7 +52,10 @@ class CustomerList(APIView):
         serializer = CustomerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            res_data = serializer.data
+            pk = Customer.objects.get(number=res_data['number']).pk
+            res_data['pk'] = pk
+            return Response(res_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
