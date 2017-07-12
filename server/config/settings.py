@@ -14,7 +14,8 @@ SECRET_KEY = 'g)xal-du=ftd&8fuv%yw8tnq9og7m=2lkllptv2kv4tbl29wi)'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.1.66'
+    '192.168.1.66',
+    'localhost'
 ]
 
 
@@ -33,10 +34,12 @@ INSTALLED_APPS = [
     'customer',
     'mailer',
     'sms',
+    'corsheaders'
 
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -44,7 +47,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    '192.168.1.68:8081',
+    '127.0.0.1:8081'
+)
+
 
 ROOT_URLCONF = 'urls'
 
@@ -99,9 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'permissions.IsPostOrIsAuthenticated',
-    ),
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
