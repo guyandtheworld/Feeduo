@@ -31,26 +31,27 @@ class Router(object):
     POST_URL = "https://control.msg91.com/api/postsms.php"
 
     def __init__(self, **kwargs):
-        self.xml_data = XML_DATA
-        self.auth_key = random.choice(AUTH_KEYS)
+        print(kwargs)
+        self.xml_data = self.XML_DATA
+        self.auth_key = random.choice(self.AUTH_KEYS)
         self.sender_id = kwargs.get('sender_id')
         if 'route' in kwargs:
-            self.route = ROUTE[0] if kwargs.get('route') == 'P' else ROUTE[1]
+            self.route = self.ROUTE[0] if kwargs.get('route') == 'P' else self.ROUTE[1]
         else:
-            self.route = ROUTE[0]
+            self.route = self.ROUTE[0]
         self.message = kwargs.get('message')
         self.number = kwargs.get('number')
 
     def setUp(self):
-        self.xml_data = xml_data.format(
+        self.xml_data = self.xml_data.format(
                 self.auth_key,
                 self.sender_id,
                 self.route,
-                CAMPAIGN,
-                COUNTRY_CODE,
+                self.CAMPAIGN,
+                self.COUNTRY_CODE,
                 self.message,
                 self.number,
             )
 
     def send(self):
-        requests.post(POST_URL, data=self.xml_data)
+        response = requests.post(self.POST_URL, data=self.xml_data).text
