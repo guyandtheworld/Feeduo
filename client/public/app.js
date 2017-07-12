@@ -7,5 +7,10 @@ angular
     .module('SampleApplication', [
         'appRoutes',
         'signup',
-        'home'
-    ]);
+        'home',
+        'ngResource'
+    ])
+    .config(['$resourceProvider', function($resourceProvider) {
+  // Don't strip trailing slashes from calculated URLs
+  $resourceProvider.defaults.stripTrailingSlashes = false;
+}]);
