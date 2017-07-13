@@ -38,13 +38,14 @@ class SendSMS(APIView):
                     else:
                         switch.switcher+=1
                     switch.save()
+                sender_id = chain.chain_code
                 code = self.hash_function()
                 coupon = random.choice(chain.coupons.all()).message
                 body = "{}- Use {} code to redeem offer.".format(coupon, code)
                 sms = SMS(
                         number=int(num),
                         message=body,
-
+                        sender_id=sender_id,
                     )
                 sms.save()
                 CouponCode(
@@ -54,10 +55,9 @@ class SendSMS(APIView):
         
 
     def process_sms(self, **kwargs):
-        texts = []
-        for sms in SMS.objects.all():
-            texts.append([sms.number, sms.message_body])
-        print(texts)
+        sms = SMS.objects.all()
+        serializer = SMSSerializer(sms, many=True)
+        return Response(serializer.data)
 
     def get(self, response, format=None):
         return Response({'status': 'Okay, I guess?'}, status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS)

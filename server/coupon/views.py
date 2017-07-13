@@ -25,8 +25,8 @@ class CouponList(APIView):
 
     def get(self, request, pk, format=None):
         chain = Chain.objects.get(pk=pk)
-        Coupons = chain.coupons.all()
-        serializer = CouponSerializer(Coupons, many=True)
+        coupons = chain.coupons.all()
+        serializer = CouponSerializer(coupons, many=True)
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
