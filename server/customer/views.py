@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from chain.models import Chain
 
 from models import Customer
-from permissions import IsPostOrIsAuthenticated
 from serializers import CustomerSerializer, CustomerChainSerializer, ChainCustomerSerializer
 
 from permissions import IsPostOrIsAuthenticated
@@ -105,6 +104,8 @@ class CustomerChainView(APIView):
     add DELETE UPDATE to CustomerChainView
     """
 
+    permission_classes = (IsPostOrIsAuthenticated,)
+
     def get_customer_object(self, pk):
         try:
             return Customer.objects.get(pk=pk)
@@ -118,19 +119,23 @@ class CustomerChainView(APIView):
 
     def post(self, request, pk, format=None):
         customer = self.get_customer_object(pk)
-        chains = request.GET.get('chains')
-        chains = chains.split(',')
+        chain_code = request.POST.get('chain_code')
+        if chain_code == None:
+            return Response({"STATUS": "No chains provided"}, status=status.HTTP_206_PARTIAL_CONTENT)
+        chain_code = chain_code.split(',')
         success = []
-        for chain_name in chains:
+        for code in chain_code:
             try:
-                chain = Chain.objects.get(name=chain_name)
+                chain = Chain.objects.get(chain_code=code)
             except Chain.DoesNotExist:
                 chain = None
             # Inefficient method
             if chain is not None and chain not in customer.chains.all() :
                 customer.chains.add(chain)
-                success.append(chain_name)
+                success.append(code)
         customer.save()
-        success_json = {}
-        success_json["added"] = success
-        return Response(success_json, status=status.HTTP_201_CREATED)
+        if len(success)>1:
+            success_json = {}
+            success_json["added"] = success
+            return Response(success_json, status=status.HTTP_201_CREATED)
+        return Response({"STATUS": "WRONG DETAILS"}, status=status.HTTP_206_PARTIAL_CONTENT)
