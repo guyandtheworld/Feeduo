@@ -31,7 +31,6 @@ class Router(object):
     POST_URL = "https://control.msg91.com/api/postsms.php"
 
     def __init__(self, **kwargs):
-        print(kwargs)
         self.xml_data = self.XML_DATA
         self.auth_key = random.choice(self.AUTH_KEYS)
         self.sender_id = kwargs.get('sender_id')

@@ -4,7 +4,9 @@ from django.db import models
 
 class SMS(models.Model):
     number = models.BigIntegerField(unique=True, validators=[MaxValueValidator(9999999999)])
-    message_body = models.CharField(max_length=140)
+    message = models.CharField(max_length=140)
+    sender_id = models.CharField(max_length=6)
+    route = models.CharField(max_length=1, default="P")
 
     def __unicode__(self):
         return "{}".format(self.number)

@@ -26,12 +26,13 @@ class SendSMS(APIView):
         for customer in customers:
             # customer.chains.all().order_by('names')
             num = customer.number
+            customer_chain = customer.chains.all()
             if num.isdigit() and len(num)==10:
-                if len(customer.chains.all())==1:
-                    chain = customer.chains.first()
+                if len(customer_chain)==1:
+                    chain = customer_chain[0]
                 else:
                     switch = ChainSwitcher.objects.get(customer=customer)
-                    chain = customer.chains.all()[switch.switcher-1]
+                    chain = customer_chain[switch.switcher-1]
                     if switch.switcher == switch.chain_len:
                         switch.switcher = 1
                     else:
@@ -42,7 +43,8 @@ class SendSMS(APIView):
                 body = "{}- Use {} code to redeem offer.".format(coupon, code)
                 sms = SMS(
                         number=int(num),
-                        message_body=body
+                        message=body,
+
                     )
                 sms.save()
                 CouponCode(
@@ -61,7 +63,9 @@ class SendSMS(APIView):
         return Response({'status': 'Okay, I guess?'}, status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS)
 
     def post(self, response, format=None):
+
         customers = Customer.objects.filter(chains__gt=0).distinct()
+
         """
         TODO
         load all customer data with more that one chain
@@ -72,6 +76,7 @@ class SendSMS(APIView):
         also cross check with the length of chains related to the customer
         to keep the length updated.
         """
+
         for customer in customers:
             try:
                 chainswitcher = ChainSwitcher.objects.get(customer=customer)

@@ -10,19 +10,5 @@ class Customer(models.Model):
     email = models.EmailField(max_length=70, unique=True)
     chains = models.ManyToManyField(Chain, blank=True, related_name="users")
 
-    def save(self, *args, **kwargs):
-        if self.pk is not None:
-            try:
-                switch = ChainSwitcher.objects.get(customer=self)
-                switch.chain_len = len(self.chains.all())
-                switch.save()
-            except ChainSwitcher.DoesNotExist:
-                switch = ChainSwitcher(
-                    customer=self,
-                    chain_len=len(self.chains.all())
-                    )
-            switch.save()
-        super(Customer, self).save(*args, **kwargs)
-
     def __unicode__(self):
         return self.name
