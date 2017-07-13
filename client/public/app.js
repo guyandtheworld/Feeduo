@@ -2,11 +2,13 @@
 
 var signup = angular.module("signup", []);
 var home = angular.module("home", []);
+var businessSignup = angular.module("businessSignup", []);
 
 angular
     .module('SampleApplication', [
         'appRoutes',
         'signup',
+        'businessSignup',
         'home',
         'ngResource'
     ])

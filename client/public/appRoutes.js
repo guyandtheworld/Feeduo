@@ -10,6 +10,13 @@ angular
     });
 
     $stateProvider.state({
+        name: 'businessSignup',
+        url: '/business/signup',
+        templateUrl: 'public/components/businessSignup/businessSignup.template.html',
+        controller: 'BusinessSignupController'
+    });
+
+    $stateProvider.state({
         name: 'home',
         url: '/',
         templateUrl: 'public/components/home/home.template.html',
