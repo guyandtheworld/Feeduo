@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from coupon.models import CouponCode
 from customer.models import Customer
 from sms.models import SMS, ChainSwitcher
-
+from sms.serializers import SMSSerializer
 
 class SendSMS(APIView):
 
@@ -57,7 +57,7 @@ class SendSMS(APIView):
     def process_sms(self, **kwargs):
         sms = SMS.objects.all()
         serializer = SMSSerializer(sms, many=True)
-        return Response(serializer.data)
+        return serializer.data
 
     def get(self, response, format=None):
         return Response({'status': 'Okay, I guess?'}, status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS)
@@ -85,5 +85,5 @@ class SendSMS(APIView):
             except ChainSwitcher.DoesNotExist:
                 ChainSwitcher(customer=customer, chain_len=len(customer.chains.all())).save()
         self.set_chain(customers)
-        self.process_sms()
-        return Response({"STATUS": "OK"}, status.HTTP_202_ACCEPTED)
+        data = self.process_sms()
+        return Response(data, status.HTTP_202_ACCEPTED)

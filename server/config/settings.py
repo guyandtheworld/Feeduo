@@ -14,7 +14,7 @@ SECRET_KEY = 'g)xal-du=ftd&8fuv%yw8tnq9og7m=2lkllptv2kv4tbl29wi)'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.1.66',
+    '192.168.1.65',
     'localhost'
 ]
 
@@ -34,8 +34,8 @@ INSTALLED_APPS = [
     'customer',
     'mailer',
     'sms',
-    'corsheaders'
-
+    'corsheaders',
+    'django_cron',
 ]
 
 MIDDLEWARE = [
@@ -121,6 +121,11 @@ REST_FRAMEWORK = {
         'sustained': '100/day'
     }
 }
+
+CRON_CLASSES = [
+    "sms.automize.SendSMS",
+    "django_cron.cron.FailedRunsNotificationCronJob",
+]
 
 EMAIL_BACKEND = "mailer.backend.DbBackend"
 
