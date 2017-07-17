@@ -1,20 +1,28 @@
 signup
-    .controller('SignupController', ['$scope','$resource','userService', function($scope,$resource,userService) {
-        $scope.message = "Hello World";
+    .controller('SignupController', ['$scope','$log','$resource','userService',function($scope,$log,$resource,userService) {
+
+        $scope.userList = [];
 
         $scope.sendData = function() {
-        	userService.save({name:'jj', email:'jj@gmail.com',number:'9447220202'})
-        }
-
+        var user = {name:'jitin',number:'9339339383',email:'jaem@ga.com'};
+        userService.add($scope.user);
+    };
 }])
     .factory('userService', function($resource) {
         return $resource(
-            'http://192.168.1.66:8000/customers/',
+            'http://192.168.1.65:8000/customers/',
             {},
             {
-            	'save': {
-                    method: 'POST'
-                	}
-
-            });
+                'add': {
+                    method: 'POST',
+//                    isArray: true,
+//                    headers: {
+ //                       'Content-Type':'application/json'
+//                        },
+                }
+            },
+            {
+ //               stripTrailingSlashes: false
+            }
+        );
     });
