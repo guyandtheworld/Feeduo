@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import random
 import string
 
 from coupon.models import CouponCode
 from customer.models import Customer
 from sms.models import SMS, ChainSwitcher
+=======
+from sms.models import SMS
+>>>>>>> Some changes to automising
 from sms.serializers import SMSSerializer
 from sms.deliver import Router
 
@@ -18,6 +22,7 @@ calculated time exceeds the treshold time of suppose 4 'o' clock,
 we should execute the do statement and start delivering the messages
 """
 
+<<<<<<< HEAD
 
 class SMSEngine(self):
 
@@ -25,11 +30,17 @@ class SMSEngine(self):
         pass
 
     def start(self):
+=======
+class SendSMS(object):
+
+    def __init__(self):
+>>>>>>> Some changes to automising
         sms = SMS.objects.all()
         sms_package = SMSSerializer(sms, many=True).data
         for kwargs in sms_package:
             router = Router(**kwargs)
             res = router.send()
+<<<<<<< HEAD
 
     def hash_function(self): 
         code_str = ''.join(random.choice(string.ascii_uppercase) for _ in range(4))
@@ -78,3 +89,6 @@ class SMSEngine(self):
             except ChainSwitcher.DoesNotExist:
                 ChainSwitcher(customer=customer, chain_len=len(customer.chains.all())).save()
         self.set_chain(customers)
+=======
+            # Save log
+>>>>>>> Some changes to automising
