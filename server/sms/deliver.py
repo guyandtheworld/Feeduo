@@ -32,7 +32,7 @@ class Router(object):
 
     def __init__(self, **kwargs):
         self.xml_data = self.XML_DATA
-        self.auth_key = "164616AZvCY6Kkv596347be"
+        self.auth_key = random.choice(self.AUTH_KEYS)
         self.sender_id = kwargs.get('sender_id')
         if 'route' in kwargs:
             self.route = self.ROUTE[0] if kwargs.get('route') == 'P' else self.ROUTE[1]
@@ -40,6 +40,11 @@ class Router(object):
             self.route = self.ROUTE[0]
         self.message = kwargs.get('message')
         self.number = kwargs.get('number')
+
+    def showdata(self):
+        data = "Sender ID: {} Message: {} Number: {}"
+        details = data.format(self.sender_id, self.message, self.number)
+        return details
 
     def setUp(self):
         self.xml_data = self.xml_data.format(
@@ -51,9 +56,7 @@ class Router(object):
                 self.message,
                 self.number,
             )
-        print(self.xml_data)
 
     def send(self):
         self.setUp()
-        response = requests.post(self.POST_URL, data=self.xml_data).text
-        print(response)
+        requests.post(self.POST_URL, data=self.xml_data)
