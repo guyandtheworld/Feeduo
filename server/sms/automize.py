@@ -1,5 +1,3 @@
-from django_cron import CronJobBase, Schedule
-
 from sms.models import SMS
 from sms.serializers import SMSSerializer
 from sms.process import Router
@@ -14,16 +12,12 @@ calculated time exceeds the treshold time of suppose 4 'o' clock,
 we should execute the do statement and start delivering the messages
 """
 
-class SendSMS(CronJobBase):
-    RUN_AT_TIMES = ['15:52']
-    MIN_NUM_FAILURES = 1
+class SendSMS(object):
 
-    schedule = Schedule(run_at_times=RUN_AT_TIMES)
-    code = 'sms.automize.SendSMS'
-
-    def do(self):
-        sms = SMS.objects.all()[0:5]
+    def __init__(self):
+        sms = SMS.objects.all()
         sms_package = SMSSerializer(sms, many=True).data
         for kwargs in sms_package:
             router = Router(**kwargs)
-            router.send()
+            res = router.send()
+            # Save log
