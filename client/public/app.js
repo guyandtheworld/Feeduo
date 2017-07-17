@@ -10,7 +10,8 @@ angular
         'signup',
         'businessSignup',
         'home',
-        'ngResource'
+        'ngResource',
+        'ngMessages'
     ])
     .config(['$resourceProvider', function($resourceProvider) {
   // Don't strip trailing slashes from calculated URLs
