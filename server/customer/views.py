@@ -26,12 +26,6 @@ get a comfirmation email to their own email and a time limit will be provided fo
 selecting the chains or to change the number. To change email, one will receive a 
 message on their registered number and can use the token or link to change the 
 
-Throttling Issue
-
-Since the API can be very prone to DDoS attacks, we're keeping the throttling value
-to the bare minimum. The GET request for Customer and Chain will be accessible to 
-only the authorized user and the POST request will be limited to 3 per minute and 10
-per day.
 """
 
 
@@ -104,8 +98,6 @@ class CustomerChainView(APIView):
     add DELETE UPDATE to CustomerChainView
     """
 
-    permission_classes = (IsPostOrIsAuthenticated,)
-
     def get_customer_object(self, pk):
         try:
             return Customer.objects.get(pk=pk)
@@ -124,18 +116,41 @@ class CustomerChainView(APIView):
             return Response({"STATUS": "No chains provided"}, status=status.HTTP_206_PARTIAL_CONTENT)
         chain_code = chain_code.split(',')
         success = []
+        chains = customer.chains.all()
         for code in chain_code:
             try:
                 chain = Chain.objects.get(chain_code=code)
             except Chain.DoesNotExist:
                 chain = None
-            # Inefficient method
-            if chain is not None and chain not in customer.chains.all() :
+            if chain is not None and chain not in chains:
                 customer.chains.add(chain)
                 success.append(code)
         customer.save()
-        if len(success)>1:
+        if len(success)>0:
             success_json = {}
             success_json["added"] = success
+            return Response(success_json, status=status.HTTP_201_CREATED)
+        return Response({"STATUS": "WRONG DETAILS"}, status=status.HTTP_206_PARTIAL_CONTENT)
+
+    def delete(self, request, pk, format=None):
+        customer = self.get_customer_object(pk)
+        chain_code = request.POST.get('chain_code')
+        if chain_code == None:
+            return Response({"STATUS": "No chains provided"}, status=status.HTTP_206_PARTIAL_CONTENT)
+        chain_code = chain_code.split(',')
+        success = []
+        chains = customer.chains.all()
+        for code in chain_code:
+            try:
+                chain = Chain.objects.get(chain_code=code)
+            except Chain.DoesNotExist:
+                chain = None
+            if chain is not None and chain in chains:
+                customer.chains.remove(chain)
+                success.append(code)
+        customer.save()
+        if len(success)>0:
+            success_json = {}
+            success_json["removed"] = success
             return Response(success_json, status=status.HTTP_201_CREATED)
         return Response({"STATUS": "WRONG DETAILS"}, status=status.HTTP_206_PARTIAL_CONTENT)
