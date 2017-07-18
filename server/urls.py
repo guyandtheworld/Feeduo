@@ -6,7 +6,6 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from chain import views as chain_view
 from coupon import views as coupon_view
 from customer import views as customer_view
-from sms import views as sms_view
 
 
 urlpatterns = [
