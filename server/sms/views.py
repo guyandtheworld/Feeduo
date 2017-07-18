@@ -1,19 +1,11 @@
 import random
 import string
 
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-
 from coupon.models import CouponCode
 from customer.models import Customer
 from sms.models import SMS, ChainSwitcher
-from sms.serializers import SMSSerializer
 
-class SendSMS(APIView):
-
-    permission_classes = (IsAuthenticated,)
+class SendSMS():
 
     def hash_function(self): 
         code_str = ''.join(random.choice(string.ascii_uppercase) for _ in range(4))
@@ -24,7 +16,6 @@ class SendSMS(APIView):
     def set_chain(self, customers, **kwargs):
         SMS.objects.all().delete()
         for customer in customers:
-            # customer.chains.all().order_by('names')
             num = customer.number
             customer_chain = customer.chains.all()
             if num.isdigit() and len(num)==10:
@@ -53,30 +44,8 @@ class SendSMS(APIView):
                         code=code
                     ).save()
         
-
-    def process_sms(self, **kwargs):
-        sms = SMS.objects.all()
-        serializer = SMSSerializer(sms, many=True)
-        return serializer.data
-
-    def get(self, response, format=None):
-        return Response({'status': 'Okay, I guess?'}, status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS)
-
-    def post(self, response, format=None):
-
+    def post(self):
         customers = Customer.objects.filter(chains__gt=0).distinct()
-
-        """
-        TODO
-        load all customer data with more that one chain
-        cross check with customer if new user added
-        if yes, add onto ChainSwitcher. From ChainSwitcher get data
-        of customer of which chain to send sms and increment the data
-        If more than two chains are present else just let it be also 
-        also cross check with the length of chains related to the customer
-        to keep the length updated.
-        """
-
         for customer in customers:
             try:
                 chainswitcher = ChainSwitcher.objects.get(customer=customer)
@@ -85,5 +54,3 @@ class SendSMS(APIView):
             except ChainSwitcher.DoesNotExist:
                 ChainSwitcher(customer=customer, chain_len=len(customer.chains.all())).save()
         self.set_chain(customers)
-        data = self.process_sms()
-        return Response(data, status.HTTP_202_ACCEPTED)
