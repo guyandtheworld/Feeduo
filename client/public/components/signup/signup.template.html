@@ -1,5 +1,5 @@
 <div class="container">
-<p> {{ userList.id }} </p>
+<p> {{ id }} </p>
 <div ng-controller="SignupController" id="formGrp" class="effect1">
     <form novalidate class="simpleForm" name="frm" class="form-group" autocomplete="off">
       <fieldset>
@@ -15,6 +15,7 @@
           </div>
         </div>
             <br>
+<p> {{ id }} </p>
           <div class="row"> 
           <div class="col-lg-6">
           <input name="num" type="tel" ng-model="user.phoneNum" ng-minlength="10" ng-maxlength="10" placeholder="Mobile Number" required >
@@ -41,12 +42,13 @@
         </div>
         </div>
         </div>
+        <button type="submit" class="btn btn-primary" ng-click="add()">Submit</button>
             <br>
           
         <label>Favourite Chain: </label> 
           <br>
         <label ng-repeat="x in chains">
-          <input type="checkbox" class="form-check-label" ng-model="chain" ng-change="add(x)" name="conditions" > {{ x }}
+          <input type="checkbox" class="form-check-label" ng-model="chain[x]" name="conditions" > {{ x }} 
         </label>
           <br>
         <button type="submit" class="btn btn-primary" ng-click="sendData()">Sign Me Up </button>
