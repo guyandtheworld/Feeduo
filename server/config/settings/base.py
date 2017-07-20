@@ -13,7 +13,6 @@ INSTALLED_APPS = [
     'chain',
     'coupon',
     'customer',
-    'mailer',
     'sms',
     'corsheaders',
 ]
@@ -46,8 +45,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 LANGUAGE_CODE = 'en-us'
 
