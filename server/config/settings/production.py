@@ -1,12 +1,15 @@
 from config.settings.base import *
+from decouple import config, Csv
 
-SECRET_KEY = 'g)xal-du=ftd&8fuv%yw8tnq9og7m=2lkllptv2kv4tbl29wi)'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
 ADMINS = [('Adarsh S', '4darshofficial@gmail.com'),]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 CORS_ORIGIN_WHITELIST = [
 ]
@@ -21,10 +24,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
         'PORT': '',
     }
 }
