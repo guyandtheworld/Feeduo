@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from models import Chain
-from serializers import ChainSerializer
+from serializers import ChainSerializer, ChainRegistrationSerializer
 
 from permissions import IsGetOrIsAuthenticated
 
@@ -24,12 +24,10 @@ class ChainList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = ChainSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ChainRegistrationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 class ChainDetail(APIView):
