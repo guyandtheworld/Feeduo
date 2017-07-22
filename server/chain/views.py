@@ -21,13 +21,7 @@ class ChainList(APIView):
     def get(self, request, format=None):
         Chains = Chain.objects.all()
         serializer = ChainSerializer(Chains, many=True)
-        chains = serializer.data
-        chain_list = []
-        for chain in chains:
-            temp = {}
-            temp[chain["chain_code"]]=chain["name"]
-            chain_list.append(temp)
-        return Response(chain_list)
+        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = ChainSerializer(data=request.data)
