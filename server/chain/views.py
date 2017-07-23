@@ -8,15 +8,11 @@ from rest_framework.views import APIView
 from models import Chain
 from serializers import ChainSerializer, ChainRegistrationSerializer
 
-from permissions import IsGetOrIsAuthenticated
-
 
 class ChainList(APIView):
     """
     Create Chain or view all Chains
     """
-
-    permission_classes = (IsGetOrIsAuthenticated,)
 
     def get(self, request, format=None):
         Chains = Chain.objects.all()

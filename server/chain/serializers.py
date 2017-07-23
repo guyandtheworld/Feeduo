@@ -3,24 +3,20 @@ from rest_framework import serializers
 from models import Chain
 
 
-class ChainSerializer(serializers.Serializer):
+class ChainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chain
         fields = ('name', 'chain_code', 'email',)
 
-class ChainRegistrationSerializer(serializers.ModelSerializer):
-    chain_code = serializers.CharField()
-    name = serializers.CharField()
-    email = serializers.EmailField()
-    password = serializers.CharField(max_length=30)
-    comfirm_password = serializers.CharField(max_length=30)
-    address = serializers.CharField()
-    contact_number = serializers.CharField(max_length=10)
-    number_of_stores = serializers.IntegerField()
 
+class ChainRegistrationSerializer(serializers.ModelSerializer):
+
+    confirm_password = serializers.CharField(max_length=30, allow_blank=False, write_only=True)
     class Meta:
         model = Chain
-        field = "__all__"
+        fields = ['chain_code', 'name', 'email', 'address', 'contact_number',
+                 'number_of_stores', 'confirm_password']
+        write_only_fields = ['password',]
 
     def validate_email(self, email):
         existing = Chain.objects.filter(email=email).first()
@@ -40,8 +36,21 @@ class ChainRegistrationSerializer(serializers.ModelSerializer):
         if not data.get('password') or not data.get('confirm_password'):
             raise serializers.ValidationError("Please enter a password and "
                 "confirm it.")
-
         if data.get('password') != data.get('confirm_password'):
             raise serializers.ValidationError("Those passwords don't match.")
-
         return data
+
+    def create(self, validated_data):
+        del validated_data["confirm_password"]
+        return Chain.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.chain_code = validated_data.get('chain_code', instance.content)
+        instance.name = validated_data.get('name', instance.content)
+        instance.address = validated_data.get('address', instance.content)
+        instance.password = validated_data.get('password', instance.content)
+        instance.contact_number = validated_data.get('contact_number', instance.content)
+        instance.number_of_stores = validated_data.get('number_of_number', instance.content)
+        instance.save()
+        return instance
