@@ -23,7 +23,7 @@ class ChainList(APIView):
         serializer = ChainRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        return Response("{Result: Success}")
 
 
 class ChainDetail(APIView):

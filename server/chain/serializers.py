@@ -10,13 +10,11 @@ class ChainSerializer(serializers.ModelSerializer):
 
 
 class ChainRegistrationSerializer(serializers.ModelSerializer):
-
     confirm_password = serializers.CharField(max_length=30, allow_blank=False, write_only=True)
     class Meta:
         model = Chain
         fields = ['chain_code', 'name', 'email', 'address', 'contact_number',
-                 'number_of_stores', 'confirm_password']
-        write_only_fields = ['password',]
+                 'number_of_stores', 'confirm_password', 'password']
 
     def validate_email(self, email):
         existing = Chain.objects.filter(email=email).first()
