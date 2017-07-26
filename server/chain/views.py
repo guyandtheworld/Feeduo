@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.contrib.auth import login, logout
 
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -24,6 +25,18 @@ class ChainList(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response("{Result: Success}")
+
+
+class AuthView(APIView):
+    # authentication_classes = (QuietBasicAuthentication,)
+ 
+    def post(self, request, *args, **kwargs):
+        login(request, request.user)
+        return Response(UserSerializer(request.user).data)
+ 
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return Response({})
 
 
 class ChainDetail(APIView):
