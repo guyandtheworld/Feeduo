@@ -1,5 +1,6 @@
 import random
 import string
+import threading
 
 from coupon.models import CouponCode
 from customer.models import Customer
@@ -8,32 +9,12 @@ from sms.serializers import SMSSerializer
 from sms.deliver import Router
 
 
-"""
-The time taken for deivering a single message is 2 seconds
-which is fucking slow. So, until we set up threading using celery 
-Here we should run this script every half hour or so
-counting the number of current registered user multiplied by two
-and calculate the time taken for delivering all the messages. If the
-calculated time exceeds the treshold time of suppose 4 'o' clock, 
-we should execute the do statement and start delivering the messages
-"""
-
-class SMSEngine(self):
-
+class MakeDatabase(object):
+    """
+        Prepares database of fresh SMS
+    """
     def __init__(self):
-        pass
-
-    def start(self):
-        pass
-
-class SendSMS(object):
-
-    def __init__(self):
-        sms = SMS.objects.all()
-        sms_package = SMSSerializer(sms, many=True).data
-        for kwargs in sms_package:
-            router = Router(**kwargs)
-            res = router.send()
+        self.make_database()
 
     def hash_function(self): 
         code_str = ''.join(random.choice(string.ascii_uppercase) for _ in range(4))
@@ -72,7 +53,7 @@ class SendSMS(object):
                         code=code
                     ).save()
         
-    def post(self):
+    def make_database(self):
         customers = Customer.objects.filter(chains__gt=0).distinct()
         for customer in customers:
             try:
@@ -82,3 +63,39 @@ class SendSMS(object):
             except ChainSwitcher.DoesNotExist:
                 ChainSwitcher(customer=customer, chain_len=len(customer.chains.all())).save()
         self.set_chain(customers)
+
+
+class DeliverSMS(threading.Thread):
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+
+    def go(self, **kwargs):
+        Router(**kwargs).send()
+
+    def run(self):
+        self.go(**self.kwargs)
+
+
+class SMSEngine(object):
+
+    def __init__(self):
+        MakeDatabase()
+
+    def start_delivery(self):
+        """
+            Gets all prepared SMS and splits it into groups of 500
+            and sends the sms 500 at a time by using threading.
+        """
+        sms = SMS.objects.all()
+        sms_package = SMSSerializer(sms, many=True).data
+        number_of_sms = len(sms_package)
+        sms_count = 0
+        for i in range(1, number_of_sms, 500):
+            sms_threads = []
+            while len(sms_package[prev:i+500])>0:
+                sms_threads.append(DeliverSMS(**sms_package(sms_count)))
+                sms_count+=1
+            for sms in sms_threads:
+                sms.start()
+            for sms in sms_threads:
+                sms.join()

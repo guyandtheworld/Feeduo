@@ -28,7 +28,7 @@ class Router(object):
 
     COUNTRY_CODE = 91
 
-    POST_URL = "https://control.msg91.com/api/postsms.php"
+    # POST_URL = "https://control.msg91.com/api/postsms.php"
 
     def __init__(self, **kwargs):
         self.xml_data = self.XML_DATA
