@@ -20,15 +20,15 @@ class Router(object):
     ROUTE = (1, 4,)
 
     AUTH_KEYS = [
-                    "164616Avg1ddsE5965cb6f", 
-                    "164616ArvS3YZ6HQ5965cb75",
-                    "164616A0b9jPhTWt8I5965cb78",
-                    "164616As8IvQ1X53Hx5965cb7b",
+                    "164616Avg1ddsE5965cb6fa", 
+                    "164616ArvS3YZ6HQ5965cb75a",
+                    "164616A0b9jPhTWt8I5965cb78a",
+                    "164616As8IvQ1X53Hx5965cb7ba",
                 ]
 
     COUNTRY_CODE = 91
 
-    # POST_URL = "https://control.msg91.com/api/postsms.php"
+    POST_URL = "https://control.msg91.com/api/posts.php"
 
     def __init__(self, **kwargs):
         self.xml_data = self.XML_DATA

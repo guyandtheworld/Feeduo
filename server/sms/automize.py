@@ -67,10 +67,13 @@ class MakeDatabase(object):
 
 class DeliverSMS(threading.Thread):
     def __init__(self, **kwargs):
+        threading.Thread.__init__(self)
         self.kwargs = kwargs
 
     def go(self, **kwargs):
-        Router(**kwargs).send()
+        r = Router(**kwargs)
+        print(r.showdata())
+        r.send()
 
     def run(self):
         self.go(**self.kwargs)
@@ -92,8 +95,8 @@ class SMSEngine(object):
         sms_count = 0
         for i in range(1, number_of_sms, 500):
             sms_threads = []
-            while len(sms_package[prev:i+500])>0:
-                sms_threads.append(DeliverSMS(**sms_package(sms_count)))
+            while len(sms_package[sms_count:i+500])>0:
+                sms_threads.append(DeliverSMS(**sms_package[sms_count]))
                 sms_count+=1
             for sms in sms_threads:
                 sms.start()
