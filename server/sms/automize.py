@@ -72,7 +72,6 @@ class DeliverSMS(threading.Thread):
 
     def go(self, **kwargs):
         r = Router(**kwargs)
-        print(r.showdata())
         r.send()
 
     def run(self):

@@ -35,12 +35,11 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
-        'throttles.BurstRateThrottle',
-        'throttles.SustainedRateThrottle'),
+        ),
     'DEFAULT_THROTTLE_RATES': {
         'anon': '5/day',
         'user': '100/day',
-        'burst': '20/min',
-        'sustained': '100/day'
+        'burst': '5/min',
+        'sustained': '50/day'
     }
 }
